@@ -1,0 +1,133 @@
+<div class="profile-wrapper" (click)="fecharMenu()">
+  <header class="profile-header">
+    <button class="back-button" routerLink="/">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+      </svg>
+    </button>
+    <h1>MEU PERFIL</h1>
+    <button class="menu-button" (click)="toggleMenu(); pararPropagacao($event)">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+      </svg>
+    </button>
+  </header>
+
+  <aside class="sidebar" [class.aberto]="menuAberto" (click)="pararPropagacao($event)">
+    <div class="sidebar-header">
+      <button class="close-sidebar-button" (click)="toggleMenu()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+          <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+        </svg>
+      </button>
+      <img [src]="usuario.imagemUrl" alt="Foto do Perfil" class="sidebar-profile-pic">
+      <h2>{{ usuario.nome }}</h2>
+      <p>{{ usuario.email }}</p>
+    </div>
+    <nav class="sidebar-nav">
+      <ul>
+        <li><a routerLink="/profile" (click)="toggleMenu()">Meu Perfil</a></li>
+        <li><a href="#" (click)="toggleMenu()">Configurações</a></li>
+        <li><a routerLink="/login" (click)="toggleMenu()">Sair</a></li>
+      </ul>
+    </nav>
+  </aside>
+  <div class="overlay" [class.ativo]="menuAberto" (click)="fecharMenu()"></div>
+
+
+  <main class="profile-content">
+    <section class="profile-info">
+      <img [src]="usuario.imagemUrl" alt="Foto do Perfil" class="profile-pic">
+      <h2>{{ usuario.nome }}</h2>
+      <p>Análise e Desenvolvimento de Sistemas</p>
+    </section>
+
+    <section class="event-list">
+      <h3>EVENTOS QUE PARTICIPEI</h3>
+      <div *ngFor="let evento of eventosParticipados" class="event-card">
+        <div class="event-summary" (click)="toggleDetalhes(evento)">
+          <div class="event-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#F39237" class="bi bi-calendar-event" viewBox="0 0 16 16">
+              <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+              <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+            </svg>
+          </div>
+          <div class="event-info">
+            <h4>{{ evento.titulo }}</h4>
+            <p>{{ evento.data }}</p>
+          </div>
+          <div class="event-status" [ngClass]="{'status-presente': evento.status === 'Presente', 'status-falta': evento.status === 'Falta'}">
+            {{ evento.status }}
+          </div>
+          <div class="event-expand-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi" viewBox="0 0 16 16" [class.bi-chevron-down]="!evento.expandido" [class.bi-chevron-up]="evento.expandido">
+              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" *ngIf="!evento.expandido"/>
+              <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" *ngIf="evento.expandido"/>
+            </svg>
+          </div>
+        </div>
+        <div class="event-details" *ngIf="evento.expandido && evento.detalhes">
+          <p><strong>Local:</strong> {{ evento.detalhes.local }}</p>
+          <p><strong>Horário:</strong> {{ evento.detalhes.horario }}</p>
+          <p><strong>Professor:</strong> {{ evento.detalhes.professor }}</p>
+          <p><strong>Observações:</strong> {{ evento.detalhes.observacoes }}</p>
+          <div *ngIf="evento.detalhes.arquivos && evento.detalhes.arquivos.length > 0">
+            <strong>Arquivos:</strong>
+            <ul>
+              <li *ngFor="let arquivo of evento.detalhes.arquivos">
+                <a href="#">{{ arquivo }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="event-list created-events">
+      <h3>EVENTOS CRIADOS POR MIM</h3>
+      <div *ngFor="let evento of eventosCriados" class="event-card">
+        <div class="event-summary" (click)="toggleDetalhes(evento)">
+          <div class="event-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#4A90E2" class="bi bi-card-list" viewBox="0 0 16 16">
+              <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zM1 2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
+              <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+            </svg>
+          </div>
+          <div class="event-info">
+            <h4>{{ evento.titulo }}</h4>
+             <a [routerLink]="evento.linkQrCode" class="qr-code-link">Ver QR Code</a>
+          </div>
+          <div class="event-expand-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi" viewBox="0 0 16 16" [class.bi-chevron-down]="!evento.expandido" [class.bi-chevron-up]="evento.expandido">
+              <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" *ngIf="!evento.expandido"/>
+              <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" *ngIf="evento.expandido"/>
+            </svg>
+          </div>
+        </div>
+        <div class="event-details event-participants" *ngIf="evento.expandido">
+          <strong>Participantes:</strong>
+          <ul *ngIf="evento.participantes.length > 0; else noParticipantes">
+            <li *ngFor="let participante of evento.participantes">
+              {{ participante.nome }} - <span class="checkin-time">Presença às: {{ participante.horarioPresenca }}</span>
+            </li>
+          </ul>
+          <ng-template #noParticipantes>
+            <p>Nenhum participante marcou presença ainda.</p>
+          </ng-template>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <button class="fixed-check-button" routerLink="/check-class">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-qr-code-scan" viewBox="0 0 16 16">
+      <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5M.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5M4 4h1v1H4z"/>
+      <path d="M7 2H2v5h5zM3 3h3v3H3zm2 8H4v1h1z"/>
+      <path d="M7 9H2v5h5zm-4 1h3v3H3zm8-6h1v1h-1z"/>
+      <path d="M9 2h5v5H9zm1 1v3h3V3zM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8zm2 2H9V9h1zm4 2h-1v1h-2v1h3zm-4 2v-1H8v1z"/>
+      <path d="M12 9h2V8h-2z"/>
+    </svg>
+    <span>Check!</span>
+  </button>
+</div>

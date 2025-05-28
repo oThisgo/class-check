@@ -16,5 +16,15 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./components/login/login.component').then((m) => m.LoginComponent)
   },
-  { path: '', redirectTo: 'qrcode', pathMatch: 'full' } // Redireciona para 'qrcode' por padrão
+  {
+    path: 'register',
+    loadComponent: () =>
+      import('./components/register/register.component').then((m) => m.RegisterComponent)
+  },
+  {
+    path: 'profile',
+    loadComponent: () =>
+      import('./components/profile/profile.component').then((m) => m.ProfileComponent)
+  },
+  { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
