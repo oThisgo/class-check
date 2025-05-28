@@ -1,7 +1,9 @@
 <div style="text-align:center; margin-top: 50px;">
   <h1>Class Check</h1>
 
-  <qrcode [qrdata]="counter().toString()" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+  <div class="qr-container">
+    <qrcode [qrdata]="counter().toString()" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+  </div>
 
   <p>Contador atual: {{ counter() }}</p>
   <p>Próximo em: {{ secondsLeft() }}s</p>
