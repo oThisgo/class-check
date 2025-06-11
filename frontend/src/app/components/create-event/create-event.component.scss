@@ -1,0 +1,124 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  background-color: #f4f4f4;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background-color: #F39237;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 60px;
+  box-sizing: border-box;
+
+  h1 {
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .back-button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 5px;
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+.form-content {
+  padding: 20px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.form-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 8px;
+    font-size: 0.9em;
+  }
+
+  input[type="text"],
+  input[type="datetime-local"],
+  input[type="number"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1em;
+    font-family: inherit;
+
+    &:focus {
+      outline: none;
+      border-color: #F39237;
+      box-shadow: 0 0 0 2px rgba(243, 146, 55, 0.2);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+  }
+}
+
+.submit-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #F39237;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #e08021;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+}
+
+.error-message {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.9em;
+}

@@ -1,0 +1,60 @@
+<div class="page-wrapper">
+  <header class="page-header">
+    <button class="back-button" routerLink="/profile">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+      </svg>
+    </button>
+    <h1>CRIAR EVENTO</h1>
+  </header>
+
+  <main class="form-content">
+    <form (ngSubmit)="onSubmit()" #eventForm="ngForm">
+      <div class="form-group">
+        <label for="titulo">Título do Evento</label>
+        <input type="text" id="titulo" name="titulo" [(ngModel)]="eventData.titulo" required>
+      </div>
+
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" name="descricao" rows="4" [(ngModel)]="eventData.descricao"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="categoria">Categoria</label>
+        <select id="categoria" name="categoria_id" [(ngModel)]="eventData.categoria_id" required>
+          <option [ngValue]="null" disabled>Selecione uma categoria</option>
+          <option *ngFor="let categoria of categories" [value]="categoria.id">
+            {{ categoria.nome }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="data_hora_inicio">Data e Hora de Início</label>
+        <input type="datetime-local" id="data_hora_inicio" name="data_hora_inicio" [(ngModel)]="eventData.data_hora_inicio" required>
+      </div>
+
+      <div class="form-group">
+        <label for="data_hora_fim">Data e Hora de Fim</label>
+        <input type="datetime-local" id="data_hora_fim" name="data_hora_fim" [(ngModel)]="eventData.data_hora_fim">
+      </div>
+
+      <div class="form-group">
+        <label for="localizacao">Localização</label>
+        <input type="text" id="localizacao" name="localizacao" [(ngModel)]="eventData.localizacao">
+      </div>
+      
+      <div class="form-group">
+        <label for="capacidade">Capacidade (Nº de pessoas)</label>
+        <input type="number" id="capacidade" name="capacidade" [(ngModel)]="eventData.capacidade">
+      </div>
+
+      <button type="submit" class="submit-button" [disabled]="!eventForm.form.valid">SALVAR EVENTO</button>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+    </form>
+  </main>
+</div>

@@ -1,0 +1,89 @@
+.wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.register-container {
+  width: 85%;
+  padding: 32px 24px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.register-label {
+  text-align: left;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+input {
+  height: 50px;
+  width: 90%;
+  margin-bottom: 30px;
+  padding: 0 10px;
+  border-radius: 9px;
+  border: 1px solid #bbb;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 5px 5px 10px lightgray;
+}
+
+input::placeholder {
+  font-size: 16px;
+  font-weight: bold;
+  color: #888;
+}
+
+button {
+  font-size: 24px;
+  height: 50px;
+  width: 95%;
+  padding: 0;
+  background: #F39237;
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  margin: 0 auto;
+  margin-bottom: 12px;
+}
+
+button:disabled {
+  background: #aaa;
+}
+
+button:focus {
+  background: #E5862C;
+}
+
+.register-container a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 95%;
+  padding: 0;
+  border-radius: 9px;
+  color: #F39237;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 24px;
+  margin: 0 auto;
+  border: 1px solid #F39237;
+}
+
+.register-container a:focus {
+  background: #D9D9D9;
+}
+
+.error {
+  color: #d32f2f;
+  margin-top: 12px;
+}

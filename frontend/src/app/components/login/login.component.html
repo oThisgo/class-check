@@ -1,0 +1,27 @@
+<div class="wrapper">
+  <div class="login-container">
+    <h2 class="login-label">LOGIN</h2>
+    <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+      <input
+        type="text"
+        name="email"
+        [(ngModel)]="email"
+        placeholder="E-mail"
+        required
+      />
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        placeholder="Senha"
+        required
+      />
+      <button type="submit" [disabled]="loginForm.invalid">Acessar</button>
+    </form>
+
+    <a routerLink="/register">Cadastrar</a>
+
+    <p *ngIf="loginError" class="error">Usuário ou senha inválidos.</p>
+
+  </div>
+</div>

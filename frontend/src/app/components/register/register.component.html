@@ -1,0 +1,45 @@
+<div class="wrapper">
+  <div class="register-container">
+    <h2 class="register-label">CADASTRAR</h2>
+    <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+      <input 
+        type="text" 
+        id="name" 
+        name="name" 
+        placeholder="Nome Completo"
+        [(ngModel)]="registerData.nome" 
+        required
+      />
+
+      <input 
+        type="email" 
+        id="email" 
+        name="email" 
+        placeholder="E-mail"
+        [(ngModel)]="registerData.email" 
+        required 
+        email
+      />
+
+      <input 
+        type="password" 
+        id="password" 
+        name="password" 
+        placeholder="Senha"
+        [(ngModel)]="registerData.senha" 
+        required 
+        minlength="6"
+      />
+
+      <button type="submit" [disabled]="!registerForm.form.valid">Registrar</button>
+
+    </form>
+
+    <div *ngIf="registerError" class="error-message">
+      Ocorreu um erro ao tentar se cadastrar. Tente novamente.
+    </div>
+
+    <a routerLink="/login">Faça o login</a>
+
+  </div>
+</div>
