@@ -18,7 +18,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "baseHref": "./",
-            "outputPath": "dist/class-check",
+            "outputPath": "dist/class-check/browser",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
