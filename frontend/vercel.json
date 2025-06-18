@@ -1,5 +1,5 @@
 {
-  "outputDirectory": "dist/class-check/browser",
+  "outputDirectory": "dist",
   "cleanUrls": true,
   "rewrites": [
     {
