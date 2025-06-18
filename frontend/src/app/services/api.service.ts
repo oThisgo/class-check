@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  
+
   private apiUrl = 'https://class-check-api.onrender.com/api';
 
   constructor(private http: HttpClient) { }
@@ -25,6 +25,10 @@ export class ApiService {
 
   getEventCategories(): Observable<any> {
     return this.http.get(`${this.apiUrl}/categorias`);
+  }
+
+  getEvent(eventId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/eventos/${eventId}`);
   }
 
   getCreatedEvents(userId: number): Observable<any> {

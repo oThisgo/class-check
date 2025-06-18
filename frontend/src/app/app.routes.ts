@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'qrcode',
+    path: 'qrcode/:id',
     loadComponent: () =>
       import('./components/qrcode/qrcode.component').then((m) => m.QrcodeComponent)
   },
