@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: class-check
+    env: node
+    rootDir: frontend
+    buildCommand: |
+      npm install -g @angular/cli
+      npm install
+      ng build --configuration=production --output-path=dist/class-check/browser --base-href ./
+    publishDir: dist/class-check/browser
