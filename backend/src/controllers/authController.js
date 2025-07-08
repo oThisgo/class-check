@@ -9,6 +9,24 @@ exports.register = async (req, res, next) => {
         return res.status(400).json({ message: 'Nome, email e senha são obrigatórios.' });
     }
     try {
+        // Verifica se já existe usuário com esse email
+        const existingUser = await db.query('SELECT * FROM Usuarios WHERE email = $1', [email]);
+        if (existingUser.rows.length > 0) {
+            // Se for um usuário incompleto (valores genéricos), faz o upgrade
+            const user = existingUser.rows[0];
+            const isIncomplete = (!user.telefone || user.telefone === 'N/A') && (!user.empresa_id || user.empresa_id === null);
+            if (isIncomplete) {
+                const hashedPassword = await bcrypt.hash(senha, 10);
+                const updatedUser = await db.query(
+                    'UPDATE Usuarios SET nome = $1, senha_hash = $2, empresa_id = $3, telefone = $4, updated_at = CURRENT_TIMESTAMP WHERE email = $5 RETURNING id, nome, email, empresa_id, telefone',
+                    [nome, hashedPassword, empresa_id, telefone, email]
+                );
+                return res.status(200).json(updatedUser.rows[0]);
+            } else {
+                return res.status(409).json({ message: 'Email já cadastrado.' });
+            }
+        }
+        // Se não existe, cria novo usuário normalmente
         const hashedPassword = await bcrypt.hash(senha, 10);
         const newUser = await db.query(
             'INSERT INTO Usuarios (nome, email, senha_hash, empresa_id, telefone) VALUES ($1, $2, $3, $4, $5) RETURNING id, nome, email, empresa_id, telefone',
@@ -16,9 +34,6 @@ exports.register = async (req, res, next) => {
         );
         res.status(201).json(newUser.rows[0]);
     } catch (error) {
-        if (error.code === '23505') { 
-             return res.status(409).json({ message: 'Email já cadastrado.' });
-        }
         next(error); 
     }
 };

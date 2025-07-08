@@ -5,11 +5,12 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BarcodeFormat } from '@zxing/browser';
 import { ApiService } from '../../services/api.service';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-check-class',
   standalone: true,
-  imports: [CommonModule, ZXingScannerModule, RouterModule, HttpClientModule],
+  imports: [CommonModule, ZXingScannerModule, RouterModule, HttpClientModule, FormsModule],
   templateUrl: './check-class.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   styleUrls: ['./check-class.component.scss']
@@ -28,6 +29,9 @@ export class CheckClassComponent implements OnInit {
     email: 'Carregando...',
     imagemUrl: 'assets/images/default-profile.png' 
   };
+  showRegisterForm = false;
+  registerData = { nome: '', email: '' };
+  qrCodeParams: { eventoId: string, qrToken: string } | null = null;
 
   constructor(private apiService: ApiService) {
     this.verificarLarguraTela();
@@ -55,20 +59,84 @@ export class CheckClassComponent implements OnInit {
     console.log('QR Code lido:', qrCodeContent);
     this.isScanning = false;
 
-    const [eventoId, qrToken] = qrCodeContent.split(';');
+    try {
+      const url = new URL(qrCodeContent);
+      const eventoId = url.searchParams.get('event');
+      const qrToken = url.searchParams.get('token');
+      const iParam = url.searchParams.get('i');
+      const i = iParam ? Number(iParam) : null;
 
-    if (!eventoId || !qrToken) {
+      if (!eventoId || !qrToken || i === null) {
+        alert('QR Code inválido!');
+        return;
+      }
+
+      const now = new Date();
+      const currentMinute = Math.floor(now.getTime() / 60000);
+      if (i !== currentMinute) {
+        alert('QR Code expirado! Por favor, escaneie o código atualizado.');
+        return;
+      }
+
+      // Verifica se usuário está logado
+      const userDataString = localStorage.getItem('userData');
+      if (!userDataString) {
+        // Exibe formulário de cadastro
+        this.showRegisterForm = true;
+        this.qrCodeParams = { eventoId, qrToken };
+        return;
+      }
+
+      this.apiService.registerPresence(eventoId, qrToken).subscribe({
+        next: (response) => {
+          alert('Presença registrada com sucesso!');
+        },
+        error: (err) => {
+          console.error('Erro ao registrar presença:', err);
+          alert(`Erro: ${err.error.message || 'Não foi possível registrar a presença.'}`);
+        }
+      });
+    } catch (e) {
       alert('QR Code inválido!');
       return;
     }
-    
-    this.apiService.registerPresence(eventoId, qrToken).subscribe({
-      next: (response) => {
-        alert('Presença registrada com sucesso!');
+  }
+
+  onRegisterSubmit() {
+    // Preenche campos genéricos
+    const userData = {
+      nome: this.registerData.nome,
+      email: this.registerData.email,
+      senha: '123456', // senha padrão
+      tipo: 'participante',
+      empresa: 'N/A',
+      telefone: 'N/A',
+      // outros campos genéricos se necessário
+    };
+    this.apiService.register(userData).subscribe({
+      next: (user) => {
+        localStorage.setItem('userData', JSON.stringify(user));
+        this.usuario = {
+          nome: user.nome,
+          email: user.email,
+          imagemUrl: user.imagemUrl || 'assets/images/default-profile.png'
+        };
+        this.showRegisterForm = false;
+        // Após cadastro, registra presença
+        if (this.qrCodeParams) {
+          this.apiService.registerPresence(this.qrCodeParams.eventoId, this.qrCodeParams.qrToken).subscribe({
+            next: (response) => {
+              alert('Presença registrada com sucesso!');
+            },
+            error: (err) => {
+              console.error('Erro ao registrar presença:', err);
+              alert(`Erro: ${err.error.message || 'Não foi possível registrar a presença.'}`);
+            }
+          });
+        }
       },
       error: (err) => {
-        console.error('Erro ao registrar presença:', err);
-        alert(`Erro: ${err.error.message || 'Não foi possível registrar a presença.'}`);
+        alert('Erro ao cadastrar usuário: ' + (err.error.message || 'Tente novamente.'));
       }
     });
   }

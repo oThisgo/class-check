@@ -51,7 +51,13 @@ export class ProfileComponent implements OnInit {
 
     this.apiService.getCreatedEvents(userId).subscribe({
       next: data => {
-        this.eventosCriados = data.map((evento: any) => ({ ...evento, expandido: false }));
+        // Adiciona as propriedades 'expandido', 'participantes' e 'participantesLoading'
+        this.eventosCriados = data.map((evento: any) => ({
+          ...evento,
+          expandido: false,
+          participantes: [],
+          participantesLoading: false
+        }));
         this.isLoading = false;
       },
       error: err => {
@@ -70,9 +76,24 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
-  
-  toggleDetalhes(evento: any): void {
-    evento.expandido = !evento.expandido;
+
+  toggleDetalhes(evento: any, isCriadoPorMim = false): void {
+  evento.expandido = !evento.expandido;
+
+    if (isCriadoPorMim && evento.expandido && evento.participantes.length === 0) {
+      evento.participantesLoading = true;
+      this.apiService.getAttendees(evento.id).subscribe({
+        next: (participantes) => {
+          evento.participantes = participantes;
+          evento.participantesLoading = false;
+        },
+        error: (err) => {
+          console.error(`Erro ao buscar participantes para o evento ${evento.id}`, err);
+          evento.participantesLoading = false;
+          // Você pode adicionar uma mensagem de erro específica para os participantes aqui se desejar
+        }
+      });
+    }
   }
 
   toggleMenu(): void { this.menuAberto = !this.menuAberto; }

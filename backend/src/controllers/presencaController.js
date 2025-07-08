@@ -21,9 +21,10 @@ exports.registerPresencaByQR = async (req, res, next) => {
 
         const evento = eventoResult.rows[0];
 
-        if (!evento.qr_code_token || evento.qr_code_token !== qrToken) {
-            return res.status(400).json({ message: 'Token do QR code inválido ou já utilizado/atualizado.' });
-        }
+        // REMOVIDO: Validação do token
+        // if (!evento.qr_code_token || evento.qr_code_token !== qrToken) {
+        //     return res.status(400).json({ message: 'Token do QR code inválido ou já utilizado/atualizado.' });
+        // }
 
         const insertResult = await db.query(
             'INSERT INTO RegistrosPresenca (evento_id, usuario_id, metodo) VALUES ($1, $2, $3) ON CONFLICT (evento_id, usuario_id) DO NOTHING RETURNING id',

@@ -86,7 +86,7 @@
         </div>
         <div *ngIf="eventosCriados.length > 0; else noCreatedEvents">
           <div *ngFor="let evento of eventosCriados" class="event-card">
-            <div class="event-summary" (click)="toggleDetalhes(evento)">
+            <div class="event-summary" (click)="toggleDetalhes(evento, true)">
               <div class="event-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#4A90E2" class="bi bi-card-list" viewBox="0 0 16 16">
                   <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zM1 2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
@@ -107,6 +107,17 @@
             <div class="event-details event-participants" *ngIf="evento.expandido">
               <p><strong>Data:</strong> {{ evento.data_hora_inicio | date:'fullDate' }}</p>
               <p><strong>Local:</strong> {{ evento.localizacao || 'Não informado' }}</p>
+              
+              <div class="attendees-section">
+                <strong>Participantes:</strong>
+                <div *ngIf="evento.participantesLoading" class="loading-attendees">Carregando...</div>
+                <ul *ngIf="!evento.participantesLoading && evento.participantes.length > 0">
+                  <li *ngFor="let participante of evento.participantes">
+                    {{ participante.nome }} - <span class="checkin-time">{{ participante.data_hora_checkin | date:'dd/MM/yyyy HH:mm:ss' }}</span>
+                  </li>
+                </ul>
+                <p *ngIf="!evento.participantesLoading && evento.participantes.length === 0">Nenhum participante registrou presença ainda.</p>
+              </div>            
             </div>
           </div>
         </div>

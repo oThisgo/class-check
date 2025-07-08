@@ -43,4 +43,8 @@ export class ApiService {
     return this.http.post(`${this.apiUrl}/eventos/${eventoId}/presenca/checkin/qr`, { qrToken });
   }
 
+  getAttendees(eventId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/eventos/${eventId}/presenca/participantes`);
+  }
+
 }

@@ -84,3 +84,39 @@ exports.getEventosParticipados = async (req, res, next) => {
         next(error);
     }
 };
+
+// Buscar usuário por email
+exports.getByEmail = async (req, res, next) => {
+    const { email } = req.params;
+    try {
+        const result = await db.query('SELECT id, nome, email, telefone, empresa_id FROM Usuarios WHERE email = $1', [email]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+        res.json(result.rows[0]);
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Atualizar usuário por email (upgrade cadastro rápido)
+exports.updateByEmail = async (req, res, next) => {
+    const { email } = req.params;
+    const { nome, senha, telefone, empresa_id } = req.body;
+    if (!nome || !senha) {
+        return res.status(400).json({ message: 'Nome e senha são obrigatórios.' });
+    }
+    try {
+        const hashedPassword = await bcrypt.hash(senha, 10);
+        const result = await db.query(
+            `UPDATE Usuarios SET nome = $1, senha_hash = $2, telefone = $3, empresa_id = $4, updated_at = CURRENT_TIMESTAMP WHERE email = $5 RETURNING id, nome, email, telefone, empresa_id`,
+            [nome, hashedPassword, telefone, empresa_id, email]
+        );
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+        res.json(result.rows[0]);
+    } catch (error) {
+        next(error);
+    }
+};

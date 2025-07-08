@@ -4,4 +4,4 @@ services:
     env: static 
     rootDir: frontend
     buildCommand: npm install && npm run build
-    publishDir: dist
+    publishDir: dist/class-check/browser

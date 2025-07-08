@@ -1,9 +1,16 @@
 <div style="text-align:center; margin-top: 50px;">
   <h1>Class Check</h1>
 
-  <div class="qr-container" *ngIf="qrCodeToken">
-    <qrcode [qrdata]="qrCodeToken" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+  <div class="qr-container" *ngIf="!isLoading && qrCodeValue">
+    <qrcode [qrdata]="qrCodeValue" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
   </div>
 
-  <p>Próximo em: {{ secondsLeft() }}s</p>
+  <div *ngIf="isLoading">
+    <p>Carregando QR Code...</p>
+  </div>
+
+  <div *ngIf="errorMessage">
+    <p style="color: red;">{{ errorMessage }}</p>
+  </div>
+
 </div>
