@@ -17,7 +17,6 @@ export class QrcodeComponent implements OnInit, OnDestroy {
   eventId: number= 1;
   qrCodeValue: string = '';
   intervalId: any;
-  i: number = 0;
   baseUrl: string = window.location.origin; // base da URL para o link do QR code
 
   constructor(private apiService: ApiService, private route: ActivatedRoute) {
@@ -30,13 +29,29 @@ export class QrcodeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.apiService.getEvent(this.eventId).subscribe({
       next: data => {
-        this.updateQrCodeValue(data);
-        this.isLoading = false;
-        // Atualiza o QR code a cada minuto
-        this.intervalId = setInterval(() => {
-          this.i += 1;
+        if (!data.qr_code_token) {
+          // Se não houver token, gera automaticamente
+          this.apiService.generateQrCodeToken(this.eventId).subscribe({
+            next: (tokenResp) => {
+              data.qr_code_token = tokenResp.qrCodeValue;
+              this.updateQrCodeValue(data);
+              this.isLoading = false;
+              this.intervalId = setInterval(() => {
+                this.updateQrCodeValue(data);
+              }, 60000);
+            },
+            error: err => {
+              this.errorMessage = 'Não foi possível gerar o token do QR code.';
+              this.isLoading = false;
+            }
+          });
+        } else {
           this.updateQrCodeValue(data);
-        }, 60000);
+          this.isLoading = false;
+          this.intervalId = setInterval(() => {
+            this.updateQrCodeValue(data);
+          }, 60000);
+        }
       },
       error: err => {
         console.error("Erro ao buscar evento", err);
@@ -47,8 +62,9 @@ export class QrcodeComponent implements OnInit, OnDestroy {
   }
 
   updateQrCodeValue(data: any) {
-    // Exemplo de link: https://dominio.com/check-class?event={id}&token={token}&i={i}
-    this.qrCodeValue = `${this.baseUrl}/check-class?event=${data.id}&token=${data.qr_code_token}&i=${this.i}`;
+    // Valor de i baseado no minuto atual (timestamp em minutos)
+    const i = Math.floor(Date.now() / 60000);
+    this.qrCodeValue = `${this.baseUrl}/check-class?event=${data.id}&token=${data.qr_code_token}&i=${i}`;
   }
 
   ngOnDestroy() {

@@ -47,4 +47,8 @@ export class ApiService {
     return this.http.get<any[]>(`${this.apiUrl}/eventos/${eventId}/presenca/participantes`);
   }
 
+  generateQrCodeToken(eventId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/eventos/${eventId}/qrcode`, {});
+  }
+
 }
