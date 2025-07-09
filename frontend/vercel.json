@@ -1,9 +1,7 @@
 {
-  "outputDirectory": "dist/class-check/browser",
-  "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/((?!.*\\..*).*)",
+      "source": "/((?!api/|.*\\..*).*)",
       "destination": "/index.html"
     }
   ]
