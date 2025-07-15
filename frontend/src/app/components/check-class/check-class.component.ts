@@ -116,25 +116,35 @@ export class CheckClassComponent implements OnInit {
     };
     this.apiService.register(userData).subscribe({
       next: (user) => {
-        localStorage.setItem('userData', JSON.stringify(user));
-        this.usuario = {
-          nome: user.nome,
-          email: user.email,
-          imagemUrl: user.imagemUrl || 'assets/images/default-profile.png'
-        };
-        this.showRegisterForm = false;
-        // Após cadastro, registra presença
-        if (this.qrCodeParams) {
-          this.apiService.registerPresence(this.qrCodeParams.eventoId, this.qrCodeParams.qrToken).subscribe({
-            next: (response) => {
-              alert('Presença registrada com sucesso!');
-            },
-            error: (err) => {
-              console.error('Erro ao registrar presença:', err);
-              alert(`Erro: ${err.error.message || 'Não foi possível registrar a presença.'}`);
+        // Após cadastro, faz login automático
+        this.apiService.login({ email: userData.email, senha: userData.senha }).subscribe({
+          next: (loginResponse) => {
+            // Salva token e dados do usuário
+            localStorage.setItem('token', loginResponse.token);
+            localStorage.setItem('userData', JSON.stringify(loginResponse.user));
+            this.usuario = {
+              nome: loginResponse.user.nome,
+              email: loginResponse.user.email,
+              imagemUrl: loginResponse.user.imagemUrl || 'assets/images/default-profile.png'
+            };
+            this.showRegisterForm = false;
+            // Após login, registra presença
+            if (this.qrCodeParams) {
+              this.apiService.registerPresence(this.qrCodeParams.eventoId, this.qrCodeParams.qrToken).subscribe({
+                next: (response) => {
+                  alert('Presença registrada com sucesso!');
+                },
+                error: (err) => {
+                  console.error('Erro ao registrar presença:', err);
+                  alert(`Erro: ${err.error.message || 'Não foi possível registrar a presença.'}`);
+                }
+              });
             }
-          });
-        }
+          },
+          error: (err) => {
+            alert('Cadastro realizado, mas houve erro ao fazer login automático: ' + (err.error.message || 'Tente novamente.'));
+          }
+        });
       },
       error: (err) => {
         alert('Erro ao cadastrar usuário: ' + (err.error.message || 'Tente novamente.'));
