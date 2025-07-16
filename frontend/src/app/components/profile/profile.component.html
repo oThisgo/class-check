@@ -108,15 +108,21 @@
               <p><strong>Data:</strong> {{ evento.data_hora_inicio | date:'fullDate' }}</p>
               <p><strong>Local:</strong> {{ evento.localizacao || 'Não informado' }}</p>
               
-              <div class="attendees-section">
-                <strong>Participantes:</strong>
-                <div *ngIf="evento.participantesLoading" class="loading-attendees">Carregando...</div>
-                <ul *ngIf="!evento.participantesLoading && evento.participantes.length > 0">
-                  <li *ngFor="let participante of evento.participantes">
-                    {{ participante.nome }} - <span class="checkin-time">{{ participante.data_hora_checkin | date:'dd/MM/yyyy HH:mm:ss' }}</span>
-                  </li>
-                </ul>
-                <p *ngIf="!evento.participantesLoading && evento.participantes.length === 0">Nenhum participante registrou presença ainda.</p>
+              <div class="attendees-section d-flex align-items-center gap-2">
+             <p>
+                <strong style="padding-right: 5px;">PARTICIPANTES</strong>
+                <button (click)="baixarParticipantesCSV(evento.participantes)" class="custom-btn small-btn">
+                  ⬇️ CSV
+                </button>
+              </p>
+              <div *ngIf="evento.participantesLoading" class="loading-attendees">Carregando...</div>
+              <ul *ngIf="!evento.participantesLoading && evento.participantes.length > 0">
+                <li *ngFor="let participante of evento.participantes">
+                  {{ participante.nome }} - <span class="checkin-time">{{ participante.data_hora_checkin | date:'dd/MM/yyyy HH:mm:ss' }}</span>
+                </li>
+              </ul>
+              <p *ngIf="!evento.participantesLoading && evento.participantes.length === 0">Nenhum participante registrou presença ainda.</p>
+
               </div>            
             </div>
           </div>
