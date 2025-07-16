@@ -58,16 +58,16 @@
     <p *ngIf="isScanning" class="scan-message">Aponte a câmera para o QR Code.</p>
 
     <!-- Formulário de cadastro rápido -->
-    <form *ngIf="showRegisterForm" (ngSubmit)="onRegisterSubmit()" class="register-form">
+    <form *ngIf="showRegisterForm" (ngSubmit)="onRegisterSubmit()" class="quick-register-form">
       <h2>Cadastro rápido</h2>
-      <label>
-        Nome:
-        <input type="text" [(ngModel)]="registerData.nome" name="nome" required />
-      </label>
-      <label>
-        Email:
-        <input type="email" [(ngModel)]="registerData.email" name="email" required />
-      </label>
+      <div class="form-group">
+        <label for="nome">Nome</label>
+        <input id="nome" type="text" [(ngModel)]="registerData.nome" name="nome" required placeholder="Digite seu nome" />
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" [(ngModel)]="registerData.email" name="email" required placeholder="Digite seu email" />
+      </div>
       <button type="submit">Cadastrar e registrar presença</button>
     </form>
   </main>

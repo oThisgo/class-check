@@ -28,13 +28,13 @@
 }
 
 
+// Removido overflow-x e height 100vh para evitar duplo scroll
 :host {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+  display: block;
+  min-height: 100vh;
   width: 100vw;
-  overflow-x: hidden; 
   background-color: #f4f4f4;
+  overflow-x: hidden;
 }
 
 .profile-wrapper {
@@ -192,7 +192,9 @@
 .profile-content {
   padding-top: 75px;
   flex-grow: 1;
-  overflow-y: auto; 
+  min-height: calc(100vh - 75px);
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .profile-info {
