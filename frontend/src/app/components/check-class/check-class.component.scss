@@ -1,16 +1,15 @@
 .quick-register-form {
-  width: 100%;
+  width: 90vw;
   max-width: 370px;
   margin: 0 auto;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  padding: 28px 16px 20px 16px;
+  padding: 28px 20px 20px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 18px;
-  box-sizing: border-box;
 
   h2 {
     color: #F39237;
@@ -25,7 +24,6 @@
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 10px;
-    box-sizing: border-box;
   }
 
   label {
@@ -37,7 +35,6 @@
 
   input {
     width: 100%;
-    min-width: 0;
     height: 44px;
     border-radius: 8px;
     border: 1px solid #bbb;
@@ -48,7 +45,6 @@
     background: #fafafa;
     font-weight: 500;
     transition: border 0.2s;
-    box-sizing: border-box;
   }
 
   input:focus {

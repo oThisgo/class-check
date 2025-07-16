@@ -195,7 +195,6 @@
   min-height: calc(100vh - 75px);
   overflow-y: auto;
   box-sizing: border-box;
-  padding-bottom: 90px; /* espaço para botão fixo ou elementos inferiores */
 }
 
 .profile-info {
@@ -227,9 +226,8 @@
   }
 }
 
-
 .event-list {
-  padding: 0 15px 30px 15px; /* espaço extra inferior para evitar sobreposição */
+  padding: 0 15px;
 
   h3 {
     font-size: 1.1em;
