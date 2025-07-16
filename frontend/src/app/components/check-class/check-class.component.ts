@@ -111,8 +111,8 @@ export class CheckClassComponent implements OnInit {
         // Após cadastro, faz login automático
         this.apiService.login({ email: userData.email, senha: userData.senha }).subscribe({
           next: (loginResponse) => {
-            // Salva token e dados do usuário
-            localStorage.setItem('token', loginResponse.token);
+            // Salva token e dados do usuário com chave padronizada 'authToken'
+            localStorage.setItem('authToken', loginResponse.token);
             localStorage.setItem('userData', JSON.stringify(loginResponse.user));
             this.usuario = {
               nome: loginResponse.user.nome,
